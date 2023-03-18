@@ -13,13 +13,12 @@ import java.time.LocalDate;
 
 @Entity
 @Table
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Task {
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     /*@NotEmpty
     @NotNull
@@ -29,6 +28,12 @@ public class Task {
     @Future
     LocalDate plannedTime;
     Status status;
+
+    public Task(String action, LocalDate plannedTime, Status status) {
+        this.action = action;
+        this.plannedTime = plannedTime;
+        this.status = status;
+    }
 
     @Override
     public String toString() {

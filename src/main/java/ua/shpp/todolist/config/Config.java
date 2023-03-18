@@ -17,13 +17,11 @@ public class Config {
     CommandLineRunner commandLineRunner(TodoRepository repository) {
         return args -> {
             Task task1 = new Task (
-                    1L,
 //                    Employee.EMPLOYEE,
                     "Todo any",
                     LocalDate.of(2023, 05, 05),
                     Status.PLANNED);
             Task task2 = new Task (
-                    2L,
 //                    Employee.ADMIN,
                     "Todo admin",
                     LocalDate.of(2023, 11, 11),
