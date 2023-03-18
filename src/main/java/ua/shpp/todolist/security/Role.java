@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import static ua.shpp.todolist.security.RolePermission.*;
 
 public enum Role {
-    EMPLOYEE(Sets.newHashSet(TASK_PROGRESS, TASK_DONE)),
-    ADMIN(Sets.newHashSet(TASK_PLANNED, TASK_PROGRESS, TASK_DONE, TASK_CANCELLED)),
+    EMPLOYEE(Sets.newHashSet(TASK_PROGRESS)),
+    ADMIN(Sets.newHashSet(TASK_PLANNED, TASK_PROGRESS, TASK_CANCELLED)),
     MANAGER(Sets.newHashSet(TASK_PLANNED, TASK_CANCELLED));
 
     private final Set<RolePermission> permissions;

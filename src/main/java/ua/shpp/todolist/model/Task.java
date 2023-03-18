@@ -1,6 +1,5 @@
 package ua.shpp.todolist.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +10,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
+
 @Entity
 @Table
 @NoArgsConstructor
@@ -20,9 +20,6 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    /*@NotEmpty
-    @NotNull
-    Employee employee;*/
     @NotEmpty
     String action;
     @Future
@@ -39,7 +36,6 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "id=" + id +
-//                ", employee=" + employee +
                 ", action='" + action + '\'' +
                 ", plannedTime=" + plannedTime +
                 ", status=" + status +

@@ -3,7 +3,6 @@ package ua.shpp.todolist.security;
 public enum RolePermission {
     TASK_PLANNED("task:planned"),
     TASK_PROGRESS("task:progress"),
-    TASK_DONE("task:done"),
     TASK_CANCELLED("task:cancelled");
 
     private final String permission;

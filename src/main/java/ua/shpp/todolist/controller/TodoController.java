@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.shpp.todolist.model.Task;
 import ua.shpp.todolist.services.TodoService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,14 +33,20 @@ public class TodoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-    public ResponseEntity<String> addTask(@RequestBody Task task) {
+    @PreAuthorize("hasAuthority('task:planned')")
+    public ResponseEntity<String> addTask(@Valid @RequestBody Task task) {
         return service.addTask(task);
     }
 
     @PutMapping("{taskId}")
-    public ResponseEntity<String> editTask(@PathVariable("taskId") Long taskId,
-                                           @RequestBody Task task) {
-        return service.editTask(taskId, task);
+    @PreAuthorize("hasAuthority('task:progress')")
+    public ResponseEntity<String> editTask(@PathVariable("taskId") Long taskId, @RequestBody Task task) {
+        return service.taskStatusChange(taskId, task);
+    }
+
+    @DeleteMapping("{taskId}")
+    @PreAuthorize("hasAuthority('task:cancelled')")
+    public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId) {
+        return service.deleteTask(taskId);
     }
 }

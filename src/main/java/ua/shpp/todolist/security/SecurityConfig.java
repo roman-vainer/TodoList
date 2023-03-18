@@ -26,11 +26,12 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+//                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
