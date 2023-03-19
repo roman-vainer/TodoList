@@ -40,7 +40,7 @@ public class TodoController {
 
     @PutMapping("{taskId}")
     @PreAuthorize("hasAuthority('task:progress')")
-    public ResponseEntity<String> editTask(@PathVariable("taskId") Long taskId, @RequestBody Task task) {
+    public ResponseEntity<String> editTask(@PathVariable("taskId") Long taskId, @Valid @RequestBody Task task) {
         return service.taskStatusChange(taskId, task);
     }
 
