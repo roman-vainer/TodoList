@@ -6,13 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.shpp.todolist.model.Task;
+import ua.shpp.todolist.dto.TaskDto;
+import ua.shpp.todolist.model.TaskEntity;
 import ua.shpp.todolist.repo.TodoRepository;
 import ua.shpp.todolist.utils.Status;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,40 +26,41 @@ public class TodoService {
         this.repository = repository;
     }
 
-    public ResponseEntity<String> addTask(Task task) {
-        if (task.getId() != null) {
+    public ResponseEntity<String> addTask(@Valid TaskDto taskDto) {
+        if (taskDto.getId() != null) {
             throw new IllegalStateException("ID should be generated automatically");
         }
-        if (task.getStatus() != Status.PLANNED) {
+        if (taskDto.getStatus() != Status.PLANNED) {
             throw new IllegalStateException("New task must have a status PLANNED");
         }
         log.info("===Add Task===");
 
-        repository.save(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Added task: " + task);
+        repository.save(DtoProjection.dtoToEntity(taskDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body("Added task: " + taskDto);
 
     }
 
-    public List<Task> getAllTasks() {
+    public List<TaskDto> getAllTasks() {
         log.info("===get All Task===");
-        return repository.findAll();
+        return repository.findAll().stream().map(DtoProjection::entityToDto).collect(Collectors.toList());
     }
 
-    public Optional<Task> getOneTask(Long taskId) {
+    public TaskDto getOneTask(Long taskId) {
         log.info("get One Task");
-        return repository.findById(taskId);
+        return DtoProjection.entityToDto(repository.getReferenceById(taskId));
     }
 
     @Transactional
-    public ResponseEntity<String> taskStatusChange(Long taskId, Task task) {
-        Task changingTask = repository.findById(taskId)
+    public ResponseEntity<String> taskStatusChange(Long taskId, @Valid TaskDto taskDto) {
+        TaskEntity changingTask = repository.findById(taskId)
                 .orElseThrow(() -> new IllegalStateException("task with id " + taskId + " does not exist"));
 
-        if (Arrays.stream(Status.values()).anyMatch(element -> element == task.getStatus())
-                && statusChangeIsCorrect(changingTask.getStatus(), task.getStatus())) {
+        if (Arrays.stream(Status.values()).anyMatch(element -> element == taskDto.getStatus())
+                && statusChangeIsCorrect(changingTask.getStatus(), taskDto.getStatus())) {
+            changingTask.setStatus(taskDto.getStatus());
 
-            changingTask.setStatus(task.getStatus());
-            return ResponseEntity.status(HttpStatus.OK).body("Changed task " + taskId + ": " + changingTask);
+            return ResponseEntity.status(HttpStatus.OK).body("Changed task " + taskId + ": "
+                    + DtoProjection.entityToDto(changingTask));
         } else {
             throw new IllegalStateException("Status change is not correct");
         }

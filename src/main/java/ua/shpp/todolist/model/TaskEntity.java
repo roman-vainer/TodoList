@@ -1,5 +1,6 @@
 package ua.shpp.todolist.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +15,10 @@ import java.time.LocalDate;
 @Entity
 @Table
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Task {
+public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -26,7 +28,7 @@ public class Task {
     LocalDate plannedTime;
     Status status;
 
-    public Task(String action, LocalDate plannedTime, Status status) {
+    public TaskEntity(String action, LocalDate plannedTime, Status status) {
         this.action = action;
         this.plannedTime = plannedTime;
         this.status = status;
