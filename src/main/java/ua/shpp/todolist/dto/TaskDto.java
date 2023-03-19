@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.shpp.todolist.utils.Status;
+import ua.shpp.todolist.validator.StatusTypeSubset;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+
+import static ua.shpp.todolist.utils.Status.PLANNED;
 
 @Getter
 @Setter
@@ -16,17 +19,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TaskDto {
     Long id;
-    @NotEmpty
+    @NotEmpty(message = "Action must not be empty")
     String action;
-    @Future
+    @Future(message = "Date must be in future")
     LocalDate plannedTime;
+    @StatusTypeSubset(anyOf = {PLANNED}, message = "New task must have a status PLANNED")
     Status status;
-
-    public TaskDto(String action, LocalDate plannedTime, Status status) {
-        this.action = action;
-        this.plannedTime = plannedTime;
-        this.status = status;
-    }
 
     @Override
     public String toString() {

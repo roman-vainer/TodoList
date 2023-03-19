@@ -30,13 +30,10 @@ public class TodoService {
         if (taskDto.getId() != null) {
             throw new IllegalStateException("ID should be generated automatically");
         }
-        if (taskDto.getStatus() != Status.PLANNED) {
-            throw new IllegalStateException("New task must have a status PLANNED");
-        }
         log.info("===Add Task===");
-
-        repository.save(DtoProjection.dtoToEntity(taskDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body("Added task: " + taskDto);
+        TaskEntity taskEntity = DtoProjection.dtoToEntity(taskDto);
+        repository.save(taskEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Added task: " + taskEntity);
 
     }
 
@@ -47,11 +44,13 @@ public class TodoService {
 
     public TaskDto getOneTask(Long taskId) {
         log.info("get One Task");
+        isTaskIdExist(taskId);
+
         return DtoProjection.entityToDto(repository.getReferenceById(taskId));
     }
 
     @Transactional
-    public ResponseEntity<String> taskStatusChange(Long taskId, @Valid TaskDto taskDto) {
+    public ResponseEntity<String> taskStatusChange(Long taskId, TaskDto taskDto) {
         TaskEntity changingTask = repository.findById(taskId)
                 .orElseThrow(() -> new IllegalStateException("task with id " + taskId + " does not exist"));
 
@@ -77,10 +76,14 @@ public class TodoService {
     }
 
     public ResponseEntity<String> deleteTask(Long taskId) {
-        if (!repository.existsById(taskId)) {
-            throw new IllegalStateException("student with id " + taskId + " does not exist");
-        }
+        isTaskIdExist(taskId);
         repository.deleteById(taskId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete task " + taskId);
+    }
+
+    private void isTaskIdExist(Long taskId) {
+        if (!repository.existsById(taskId)) {
+            throw new IllegalStateException("task with id " + taskId + " does not exist");
+        }
     }
 }

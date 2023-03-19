@@ -4,8 +4,11 @@ import ua.shpp.todolist.dto.TaskDto;
 import ua.shpp.todolist.model.TaskEntity;
 
 public class DtoProjection {
+    private DtoProjection() {
+    }
+
     public static TaskEntity dtoToEntity (TaskDto dto) {
-        return new TaskEntity(dto.getId(), dto.getAction(), dto.getPlannedTime(), dto.getStatus());
+        return new TaskEntity(dto.getAction(), dto.getPlannedTime(), dto.getStatus());
     }
 
     public static TaskDto entityToDto (TaskEntity entity) {

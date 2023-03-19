@@ -1,4 +1,4 @@
-package ua.shpp.todolist.services;
+package ua.shpp.todolist.utils;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
