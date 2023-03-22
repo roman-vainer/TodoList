@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ua.shpp.todolist.dto.ErrorDto;
+import ua.shpp.todolist.utils.Status;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -22,10 +24,9 @@ public class MyAdviceController {
     @ResponseBody
     public ResponseEntity<ErrorDto> processValidationError(MethodArgumentNotValidException e) {
 
-        String errorMessage =  e.getBindingResult().getAllErrors().stream()
+        String errorMessage = e.getBindingResult().getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList()).toString();
-
         ErrorDto errorDto = new ErrorDto(LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation error",
@@ -42,7 +43,7 @@ public class MyAdviceController {
         ErrorDto errorDto = new ErrorDto(LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Status format of task error",
-                "Status must be one of the values: [CANCELLED, DONE, PLANNED, PROGRESS]");
+                "Status must be one of the values: " + Arrays.toString(Status.values()));
 
         return ResponseEntity.badRequest().body(errorDto);
     }

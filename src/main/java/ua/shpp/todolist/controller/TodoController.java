@@ -22,9 +22,7 @@ public class TodoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-    public List<TaskDto> getToDoList() {
-        return service.getAllTasks();
-    }
+    public List<TaskDto> getToDoList() { return service.getAllTasks(); }
 
     @GetMapping("{taskId}")
     public TaskDto getOneTask(@PathVariable("taskId") Long taskId) {
@@ -39,7 +37,7 @@ public class TodoController {
 
     @PutMapping("{taskId}")
     @PreAuthorize("hasAuthority('task:progress')")
-    public ResponseEntity<String> editTask(@PathVariable("taskId") Long taskId, @RequestBody TaskDto task) {
+    public ResponseEntity<String> editTaskStatus(@PathVariable("taskId") Long taskId, @RequestBody TaskDto task) {
         return service.taskStatusChange(taskId, task);
     }
 

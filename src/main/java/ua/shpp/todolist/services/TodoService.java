@@ -51,11 +51,10 @@ public class TodoService {
 
     @Transactional
     public ResponseEntity<String> taskStatusChange(Long taskId, TaskDto taskDto) {
-        TaskEntity changingTask = repository.findById(taskId)
-                .orElseThrow(() -> new IllegalStateException("task with id " + taskId + " does not exist"));
+        TaskEntity changingTask = repository.getReferenceById(taskId)/*findById(taskId)*/;
+//                .orElseThrow(() -> new IllegalStateException("task with id " + taskId + " does not exist"));
 
-        if (Arrays.stream(Status.values()).anyMatch(element -> element == taskDto.getStatus())
-                && statusChangeIsCorrect(changingTask.getStatus(), taskDto.getStatus())) {
+        if (isNewStatusCorrect(changingTask.getStatus(), taskDto.getStatus())) {
             changingTask.setStatus(taskDto.getStatus());
 
             return ResponseEntity.status(HttpStatus.OK).body("Changed task " + taskId + ": "
@@ -65,14 +64,11 @@ public class TodoService {
         }
     }
 
-    private boolean statusChangeIsCorrect(Status currentStatus, Status newStatus) {
-        int currentOrdinal = currentStatus.ordinal();
-        int newOrdinal = newStatus.ordinal();
-
-        if (currentStatus == Status.valueOf("DONE")) {
-            throw new IllegalStateException("Task status cannot be changed because it is completed");
+    private boolean isNewStatusCorrect(Status currentStatus, Status newStatus) {
+        if (currentStatus == Status.DONE || currentStatus == Status.CANCELLED) {
+            throw new IllegalStateException("Task status cannot be changed because it is completed or cancelled");
         }
-        return newOrdinal == currentOrdinal + 1 || newStatus == Status.valueOf("CANCELLED");
+        return currentStatus.getAllowedState().contains(newStatus);
     }
 
     public ResponseEntity<String> deleteTask(Long taskId) {
