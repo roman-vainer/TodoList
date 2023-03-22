@@ -1,11 +1,11 @@
 package ua.shpp.todolist.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ua.shpp.todolist.model.Task;
+import ua.shpp.todolist.model.TaskEntity;
 
 import java.util.Optional;
 
-public interface TodoRepository extends JpaRepository <Task, Long> {
+public interface TodoRepository extends JpaRepository <TaskEntity, Long> {
 
-    Optional<Task> findById (Long id);
+    Optional<TaskEntity> findById (Long id);
 }

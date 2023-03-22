@@ -1,40 +1,34 @@
-package ua.shpp.todolist.model;
+package ua.shpp.todolist.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.shpp.todolist.utils.Status;
+import ua.shpp.todolist.validator.StatusTypeSubset;
 
-import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
+import static ua.shpp.todolist.utils.Status.PLANNED;
 
-@Entity
-@Table
-@NoArgsConstructor
 @Getter
 @Setter
-public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+@AllArgsConstructor
+public class TaskDto {
     Long id;
-    @NotEmpty
+    @NotEmpty(message = "Action must not be empty")
     String action;
-    @Future
+    @Future(message = "Date must be in future")
     LocalDate plannedTime;
+    @StatusTypeSubset(anyOf = {PLANNED}, message = "New task must have a status PLANNED")
     Status status;
-
-    public Task(String action, LocalDate plannedTime, Status status) {
-        this.action = action;
-        this.plannedTime = plannedTime;
-        this.status = status;
-    }
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "TaskDto{" +
                 "id=" + id +
                 ", action='" + action + '\'' +
                 ", plannedTime=" + plannedTime +
