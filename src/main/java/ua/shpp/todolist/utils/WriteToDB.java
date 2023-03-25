@@ -9,8 +9,7 @@ import ua.shpp.todolist.repo.TodoRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ua.shpp.todolist.utils.Status.*;
-
+import static ua.shpp.todolist.dto.Status.*;
 
 @Component
 public class WriteToDB {
@@ -19,7 +18,7 @@ public class WriteToDB {
         return args -> {
             TaskEntity task1 = new TaskEntity(
                     "Todo any",
-                    LocalDate.of(2023, 05, 05),
+                    LocalDate.of(2023, 5, 10),
                     PLANNED);
             TaskEntity task2 = new TaskEntity(
                     "Todo else any",

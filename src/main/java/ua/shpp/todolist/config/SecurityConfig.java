@@ -12,17 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static ua.shpp.todolist.utils.Role.*;
+import static ua.shpp.todolist.model.Role.*;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@SecurityScheme(name = "Admin-Bob-Manager", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "Admin-User-Manager", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
@@ -45,9 +44,9 @@ public class SecurityConfig {
 
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails bob = User.builder()
-                .username("Bob")
-                .password(passwordEncoder.encode("bob"))
+        UserDetails user = User.builder()
+                .username("User")
+                .password(passwordEncoder.encode("user"))
                 .authorities(EMPLOYEE.getGrantedAuthority())
                 .build();
         UserDetails admin = User.builder()
@@ -61,6 +60,6 @@ public class SecurityConfig {
                 .authorities(MANAGER.getGrantedAuthority())
                 .build();
 
-        return new InMemoryUserDetailsManager(bob, admin, manager);
+        return new InMemoryUserDetailsManager(user, admin, manager);
     }
 }

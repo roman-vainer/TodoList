@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ua.shpp.todolist.utils.Status;
+import ua.shpp.todolist.dto.Status;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-
 
 @Entity
 @Table

@@ -1,4 +1,4 @@
-package ua.shpp.todolist.services;
+package ua.shpp.todolist.utils;
 
 import ua.shpp.todolist.dto.TaskDto;
 import ua.shpp.todolist.model.TaskEntity;

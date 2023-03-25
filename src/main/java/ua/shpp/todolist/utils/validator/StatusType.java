@@ -1,6 +1,6 @@
-package ua.shpp.todolist.validator;
+package ua.shpp.todolist.utils.validator;
 
-import ua.shpp.todolist.utils.Status;
+import ua.shpp.todolist.dto.Status;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

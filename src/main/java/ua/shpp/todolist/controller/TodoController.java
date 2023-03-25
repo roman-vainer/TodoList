@@ -14,7 +14,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/todo")
-@SecurityRequirement(name="Admin-Bob-Manager")
+@SecurityRequirement(name = "Admin-User-Manager")
 public class TodoController {
     private final TodoService service;
 
@@ -25,7 +25,9 @@ public class TodoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-    public List<TaskDto> getToDoList() { return service.getAllTasks(); }
+    public List<TaskDto> getToDoList() {
+        return service.getAllTasks();
+    }
 
     @GetMapping("{taskId}")
     public TaskDto getOneTask(@PathVariable("taskId") Long taskId,
@@ -49,7 +51,7 @@ public class TodoController {
     }
 
     @DeleteMapping("{taskId}")
-    @PreAuthorize("hasAuthority('task:cancelled')")
+    @PreAuthorize("hasAuthority('task:deleted')")
     public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId,
                                              @RequestParam Locale locale) {
         return service.deleteTask(taskId, locale);

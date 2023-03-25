@@ -2,7 +2,6 @@ package ua.shpp.todolist.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.shpp.todolist.dto.TaskDto;
 import ua.shpp.todolist.model.TaskEntity;
 import ua.shpp.todolist.repo.TodoRepository;
-import ua.shpp.todolist.utils.Status;
+import ua.shpp.todolist.utils.DtoProjection;
+import ua.shpp.todolist.dto.Status;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -39,7 +39,6 @@ public class TodoService {
         TaskEntity taskEntity = DtoProjection.dtoToEntity(taskDto);
         repository.save(taskEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body("Added task: " + taskEntity);
-
     }
 
     public List<TaskDto> getAllTasks() {

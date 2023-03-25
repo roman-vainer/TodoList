@@ -6,12 +6,13 @@ import org.mockito.Mockito;
 import ua.shpp.todolist.dto.TaskDto;
 import ua.shpp.todolist.model.TaskEntity;
 import ua.shpp.todolist.repo.TodoRepository;
+import ua.shpp.todolist.utils.DtoProjection;
 
 import java.time.LocalDate;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.shpp.todolist.utils.Status.*;
+import static ua.shpp.todolist.dto.Status.*;
 
 class TodoServiceTest {
     TodoRepository repository = Mockito.mock(TodoRepository.class);

@@ -1,4 +1,4 @@
-package ua.shpp.todolist.utils;
+package ua.shpp.todolist.dto;
 
 import java.util.Set;
 
