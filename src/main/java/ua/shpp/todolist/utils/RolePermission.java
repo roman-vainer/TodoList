@@ -1,4 +1,4 @@
-package ua.shpp.todolist.security;
+package ua.shpp.todolist.utils;
 
 public enum RolePermission {
     TASK_PLANNED("task:planned"),

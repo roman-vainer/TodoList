@@ -4,18 +4,17 @@ import ua.shpp.todolist.utils.Status;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Arrays;
 
-public class StatusValidator implements ConstraintValidator<StatusTypeSubset, Status> {
+public class StatusValidator implements ConstraintValidator<StatusType, Status> {
 
-    private Status[] subset;
+    private Status value;
     @Override
-    public void initialize(StatusTypeSubset constraint) {
-        this.subset = constraint.anyOf();
+    public void initialize(StatusType constraint) {
+        this.value = constraint.value();
     }
 
     @Override
     public boolean isValid(Status status, ConstraintValidatorContext context) {
-        return status == null || Arrays.asList(subset).contains(status);
+        return status == null || value == status;
     }
 }

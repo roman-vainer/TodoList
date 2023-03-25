@@ -1,18 +1,17 @@
-package ua.shpp.todolist.security;
+package ua.shpp.todolist.utils;
 
 
-import com.google.common.collect.Sets;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ua.shpp.todolist.security.RolePermission.*;
+import static ua.shpp.todolist.utils.RolePermission.*;
 
 public enum Role {
-    EMPLOYEE(Sets.newHashSet(TASK_PROGRESS)),
-    ADMIN(Sets.newHashSet(TASK_PLANNED, TASK_PROGRESS, TASK_CANCELLED)),
-    MANAGER(Sets.newHashSet(TASK_PLANNED, TASK_CANCELLED));
+    EMPLOYEE(Set.of(TASK_PROGRESS)),
+    ADMIN(Set.of(TASK_PLANNED, TASK_PROGRESS, TASK_CANCELLED)),
+    MANAGER(Set.of(TASK_PLANNED, TASK_CANCELLED));
 
     private final Set<RolePermission> permissions;
 
