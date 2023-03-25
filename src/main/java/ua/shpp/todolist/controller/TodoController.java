@@ -1,6 +1,6 @@
 package ua.shpp.todolist.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +14,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/todo")
+@SecurityRequirement(name="Admin-Bob-Manager")
 public class TodoController {
     private final TodoService service;
 
@@ -28,14 +29,14 @@ public class TodoController {
 
     @GetMapping("{taskId}")
     public TaskDto getOneTask(@PathVariable("taskId") Long taskId,
-                              @Parameter(hidden = true) Locale locale) {
+                              @RequestParam Locale locale) {
         return service.getOneTask(taskId, locale);
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('task:planned')")
     public ResponseEntity<String> addTask(@Valid @RequestBody TaskDto task,
-                                          @Parameter Locale locale) {
+                                          @RequestParam Locale locale) {
         return service.addTask(task, locale);
     }
 
@@ -43,13 +44,14 @@ public class TodoController {
     @PreAuthorize("hasAuthority('task:progress')")
     public ResponseEntity<String> editTaskStatus(@PathVariable("taskId") Long taskId,
                                                  @RequestBody TaskDto task,
-                                                 @Parameter Locale locale) {
+                                                 @RequestParam Locale locale) {
         return service.taskStatusChange(taskId, task, locale);
     }
 
     @DeleteMapping("{taskId}")
     @PreAuthorize("hasAuthority('task:cancelled')")
-    public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId, @Parameter Locale locale) {
+    public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId,
+                                             @RequestParam Locale locale) {
         return service.deleteTask(taskId, locale);
     }
 }
