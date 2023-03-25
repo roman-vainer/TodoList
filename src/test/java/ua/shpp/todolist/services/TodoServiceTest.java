@@ -16,9 +16,9 @@ import static ua.shpp.todolist.utils.Status.*;
 class TodoServiceTest {
     TodoRepository repository = Mockito.mock(TodoRepository.class);
     TodoService service = new TodoService(repository);
+    Locale locale = new Locale("en");
     TaskEntity currentTask;
     TaskDto newStatusTask;
-    Locale locale;
 
     @BeforeEach
     void setUp() {
@@ -35,6 +35,7 @@ class TodoServiceTest {
                 PLANNED);
 
         Mockito.when(repository.getReferenceById(1L)).thenReturn(currentTask);
+        Mockito.when(repository.existsById(1L)).thenReturn(true);
     }
 
     @Test()
@@ -46,7 +47,7 @@ class TodoServiceTest {
         assertEquals(currentTask.getStatus(), newStatusTask.getStatus());
     }
 
-   /* @Test()
+    @Test()
     void status_Planned_IncorrectChangeTest() throws IllegalStateException {
         currentTask.setStatus(PLANNED);
         newStatusTask.setStatus(DONE);
@@ -162,5 +163,5 @@ class TodoServiceTest {
             service.taskStatusChange(1L, newStatusTask, locale);
         });
         assertEquals("Task status cannot be changed because it is completed or cancelled", exception.getMessage());
-    }*/
+    }
 }

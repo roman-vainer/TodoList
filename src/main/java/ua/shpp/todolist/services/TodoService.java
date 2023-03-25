@@ -50,31 +50,31 @@ public class TodoService {
     public TaskDto getOneTask(Long taskId, Locale locale) {
         log.info("get One Task");
         ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
-        isTaskIdExist(taskId/*, bundle*/);
+        isTaskIdExist(taskId, bundle);
 
         return DtoProjection.entityToDto(repository.getReferenceById(taskId));
     }
 
     @Transactional
     public ResponseEntity<String> taskStatusChange(Long taskId, TaskDto taskDto, Locale locale) {
-        //ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
 
-        isTaskIdExist(taskId/*, bundle*/);
+        isTaskIdExist(taskId, bundle);
         TaskEntity changingTask = repository.getReferenceById(taskId);
 
-        if (isNewStatusCorrect(changingTask.getStatus(), taskDto.getStatus()/*, bundle*/)) {
+        if (isNewStatusCorrect(changingTask.getStatus(), taskDto.getStatus(), bundle)) {
             changingTask.setStatus(taskDto.getStatus());
 
             return ResponseEntity.status(HttpStatus.OK).body("Changed task " + taskId + ": "
                     + DtoProjection.entityToDto(changingTask));
         } else {
-            throw new IllegalStateException(/*bundle.getString(*/"incorrectChangeStatus"/*)*/);
+            throw new IllegalStateException(bundle.getString("incorrectChangeStatus"));
         }
     }
 
-    private boolean isNewStatusCorrect(Status currentStatus, Status newStatus/*, ResourceBundle bundle*/) {
+    private boolean isNewStatusCorrect(Status currentStatus, Status newStatus, ResourceBundle bundle) {
         if (currentStatus == Status.DONE || currentStatus == Status.CANCELLED) {
-            throw new IllegalStateException(/*bundle.getString(*/"finalStatus"/*)*/);
+            throw new IllegalStateException(bundle.getString("finalStatus"));
         }
         return currentStatus.getAllowedState().contains(newStatus);
     }
@@ -82,14 +82,14 @@ public class TodoService {
     public ResponseEntity<String> deleteTask(Long taskId, Locale locale) {
         ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
 
-        isTaskIdExist(taskId/*, bundle*/);
+        isTaskIdExist(taskId, bundle);
         repository.deleteById(taskId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete task " + taskId);
     }
 
-    private void isTaskIdExist(Long taskId/*, ResourceBundle bundle*/) {
+    private void isTaskIdExist(Long taskId, ResourceBundle bundle) {
         if (!repository.existsById(taskId)) {
-            throw new IllegalStateException(/*bundle.getString(*/"taskNotExist"/*) + taskId*/);
+            throw new IllegalStateException(bundle.getString("taskNotExist") + taskId);
         }
     }
 }
