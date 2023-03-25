@@ -1,4 +1,4 @@
-package ua.shpp.todolist.security;
+package ua.shpp.todolist.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

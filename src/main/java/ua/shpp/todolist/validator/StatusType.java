@@ -15,9 +15,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = StatusValidator.class)
-public @interface StatusTypeSubset {
-    Status[] anyOf();
-    String message() default "must be any of {anyOf}";
+public @interface StatusType {
+    Status value();
+    String message() default "New task must have a status {value}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

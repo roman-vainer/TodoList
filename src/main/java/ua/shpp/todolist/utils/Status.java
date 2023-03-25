@@ -1,50 +1,50 @@
 package ua.shpp.todolist.utils;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.Set;
 
 public enum Status {
     PLANNED {
         @Override
-        public List<Status> getAllowedState() {
-            return Arrays.asList(PROGRESS, POSTPONED, NOTIFIED, SIGNED, CANCELLED);
+        public Set<Status> getAllowedState() {
+            return Set.of(PROGRESS, POSTPONED, NOTIFIED, SIGNED, CANCELLED);
         }
     },
     PROGRESS {
         @Override
-        public List<Status> getAllowedState() {
-            return Arrays.asList(POSTPONED, NOTIFIED, SIGNED, CANCELLED);
+        public Set<Status> getAllowedState() {
+            return Set.of(POSTPONED, NOTIFIED, SIGNED, CANCELLED);
         }
     },
     POSTPONED {
         @Override
-        public List<Status> getAllowedState() {
-            return Arrays.asList(NOTIFIED, SIGNED, CANCELLED);
+        public Set<Status> getAllowedState() {
+            return Set.of(NOTIFIED, SIGNED, CANCELLED);
         }
     },
     NOTIFIED {
         @Override
-        public List<Status> getAllowedState() {
-            return Arrays.asList(SIGNED, DONE, CANCELLED);
+        public Set<Status> getAllowedState() {
+            return Set.of(SIGNED, DONE, CANCELLED);
         }
     },
     SIGNED {
         @Override
-        public List<Status> getAllowedState() {
-            return Arrays.asList(DONE, CANCELLED);
+        public Set<Status> getAllowedState() {
+            return Set.of(DONE, CANCELLED);
         }
     },
     DONE {
         @Override
-        public List<Status> getAllowedState() {
-            return List.of(this);
+        public Set<Status> getAllowedState() {
+            return Set.of(this);
         }
     },
     CANCELLED {
         @Override
-        public List<Status> getAllowedState() {
-            return List.of(this);
+        public Set<Status> getAllowedState() {
+            return Set.of(this);
         }
     };
 
-    public abstract List<Status> getAllowedState();
+    public abstract Set<Status> getAllowedState();
 }

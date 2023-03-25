@@ -2,6 +2,7 @@ package ua.shpp.todolist.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,23 +13,27 @@ import ua.shpp.todolist.repo.TodoRepository;
 import ua.shpp.todolist.utils.Status;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class TodoService {
     private final TodoRepository repository;
+    private static final String PATH_MESSAGES = "messages";
 
     @Autowired
     public TodoService(TodoRepository repository) {
         this.repository = repository;
     }
 
-    public ResponseEntity<String> addTask(@Valid TaskDto taskDto) {
+    public ResponseEntity<String> addTask(@Valid TaskDto taskDto, Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
+
         if (taskDto.getId() != null) {
-            throw new IllegalStateException("ID should be generated automatically");
+            throw new IllegalStateException(bundle.getString("idGenerated"));
         }
         log.info("===Add Task===");
         TaskEntity taskEntity = DtoProjection.dtoToEntity(taskDto);
@@ -42,44 +47,49 @@ public class TodoService {
         return repository.findAll().stream().map(DtoProjection::entityToDto).collect(Collectors.toList());
     }
 
-    public TaskDto getOneTask(Long taskId) {
+    public TaskDto getOneTask(Long taskId, Locale locale) {
         log.info("get One Task");
-        isTaskIdExist(taskId);
+        ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
+        isTaskIdExist(taskId/*, bundle*/);
 
         return DtoProjection.entityToDto(repository.getReferenceById(taskId));
     }
 
     @Transactional
-    public ResponseEntity<String> taskStatusChange(Long taskId, TaskDto taskDto) {
-        TaskEntity changingTask = repository.getReferenceById(taskId)/*findById(taskId)*/;
-//                .orElseThrow(() -> new IllegalStateException("task with id " + taskId + " does not exist"));
+    public ResponseEntity<String> taskStatusChange(Long taskId, TaskDto taskDto, Locale locale) {
+        //ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
 
-        if (isNewStatusCorrect(changingTask.getStatus(), taskDto.getStatus())) {
+        isTaskIdExist(taskId/*, bundle*/);
+        TaskEntity changingTask = repository.getReferenceById(taskId);
+
+        if (isNewStatusCorrect(changingTask.getStatus(), taskDto.getStatus()/*, bundle*/)) {
             changingTask.setStatus(taskDto.getStatus());
 
             return ResponseEntity.status(HttpStatus.OK).body("Changed task " + taskId + ": "
                     + DtoProjection.entityToDto(changingTask));
         } else {
-            throw new IllegalStateException("Status change is not correct");
+            throw new IllegalStateException(/*bundle.getString(*/"incorrectChangeStatus"/*)*/);
         }
     }
 
-    private boolean isNewStatusCorrect(Status currentStatus, Status newStatus) {
+    private boolean isNewStatusCorrect(Status currentStatus, Status newStatus/*, ResourceBundle bundle*/) {
         if (currentStatus == Status.DONE || currentStatus == Status.CANCELLED) {
-            throw new IllegalStateException("Task status cannot be changed because it is completed or cancelled");
+            throw new IllegalStateException(/*bundle.getString(*/"finalStatus"/*)*/);
         }
         return currentStatus.getAllowedState().contains(newStatus);
     }
 
-    public ResponseEntity<String> deleteTask(Long taskId) {
-        isTaskIdExist(taskId);
+    public ResponseEntity<String> deleteTask(Long taskId, Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle(PATH_MESSAGES, locale);
+
+        isTaskIdExist(taskId/*, bundle*/);
         repository.deleteById(taskId);
         return ResponseEntity.status(HttpStatus.OK).body("Delete task " + taskId);
     }
 
-    private void isTaskIdExist(Long taskId) {
+    private void isTaskIdExist(Long taskId/*, ResourceBundle bundle*/) {
         if (!repository.existsById(taskId)) {
-            throw new IllegalStateException("task with id " + taskId + " does not exist");
+            throw new IllegalStateException(/*bundle.getString(*/"taskNotExist"/*) + taskId*/);
         }
     }
 }

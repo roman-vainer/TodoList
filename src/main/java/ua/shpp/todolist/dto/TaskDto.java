@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.shpp.todolist.utils.Status;
-import ua.shpp.todolist.validator.StatusTypeSubset;
+import ua.shpp.todolist.validator.StatusType;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
@@ -19,11 +19,11 @@ import static ua.shpp.todolist.utils.Status.PLANNED;
 @AllArgsConstructor
 public class TaskDto {
     Long id;
-    @NotEmpty(message = "Action must not be empty")
+    @NotEmpty(message = "{notEmpty}")
     String action;
-    @Future(message = "Date must be in future")
+    @Future(message = "{future}")
     LocalDate plannedTime;
-    @StatusTypeSubset(anyOf = {PLANNED}, message = "New task must have a status PLANNED")
+    @StatusType(value = PLANNED, message = "{statusType}")
     Status status;
 
     @Override

@@ -1,5 +1,6 @@
 package ua.shpp.todolist.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +10,7 @@ import ua.shpp.todolist.services.TodoService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/todo")
@@ -25,25 +27,29 @@ public class TodoController {
     public List<TaskDto> getToDoList() { return service.getAllTasks(); }
 
     @GetMapping("{taskId}")
-    public TaskDto getOneTask(@PathVariable("taskId") Long taskId) {
-        return service.getOneTask(taskId);
+    public TaskDto getOneTask(@PathVariable("taskId") Long taskId,
+                              @Parameter(hidden = true) Locale locale) {
+        return service.getOneTask(taskId, locale);
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('task:planned')")
-    public ResponseEntity<String> addTask(@Valid @RequestBody TaskDto task) {
-        return service.addTask(task);
+    public ResponseEntity<String> addTask(@Valid @RequestBody TaskDto task,
+                                          @Parameter Locale locale) {
+        return service.addTask(task, locale);
     }
 
     @PutMapping("{taskId}")
     @PreAuthorize("hasAuthority('task:progress')")
-    public ResponseEntity<String> editTaskStatus(@PathVariable("taskId") Long taskId, @RequestBody TaskDto task) {
-        return service.taskStatusChange(taskId, task);
+    public ResponseEntity<String> editTaskStatus(@PathVariable("taskId") Long taskId,
+                                                 @RequestBody TaskDto task,
+                                                 @Parameter Locale locale) {
+        return service.taskStatusChange(taskId, task, locale);
     }
 
     @DeleteMapping("{taskId}")
     @PreAuthorize("hasAuthority('task:cancelled')")
-    public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId) {
-        return service.deleteTask(taskId);
+    public ResponseEntity<String> deleteTask(@PathVariable("taskId") Long taskId, @Parameter Locale locale) {
+        return service.deleteTask(taskId, locale);
     }
 }

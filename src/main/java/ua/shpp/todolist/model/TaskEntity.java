@@ -22,9 +22,7 @@ public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @NotEmpty
     String action;
-    @Future
     LocalDate plannedTime;
     Status status;
 
