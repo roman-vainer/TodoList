@@ -1,6 +1,5 @@
 package ua.shpp.todolist.controller;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ua.shpp.todolist.dto.ErrorDto;
-import ua.shpp.todolist.dto.Status;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -32,17 +29,6 @@ public class MyAdviceController {
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation error",
                 errorMessage));
-    }
-
-    @ExceptionHandler(InvalidFormatException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ResponseEntity<ErrorDto> statusError() {
-
-        return ResponseEntity.badRequest().body(new ErrorDto(LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Status format of task error",
-                "Status must be one of the values: " + Arrays.toString(Status.values())));
     }
 
     @ExceptionHandler(IllegalStateException.class)

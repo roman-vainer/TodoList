@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.shpp.todolist.dto.Status;
 import ua.shpp.todolist.dto.TaskDto;
 import ua.shpp.todolist.model.TaskEntity;
 import ua.shpp.todolist.repo.TodoRepository;
 import ua.shpp.todolist.utils.DtoProjection;
-import ua.shpp.todolist.dto.Status;
 
 import javax.validation.Valid;
 import java.util.List;
