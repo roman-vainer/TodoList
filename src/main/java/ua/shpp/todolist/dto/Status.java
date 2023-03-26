@@ -1,5 +1,8 @@
 package ua.shpp.todolist.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Arrays;
 import java.util.Set;
 
 public enum Status {
@@ -47,4 +50,14 @@ public enum Status {
     };
 
     public abstract Set<Status> getAllowedState();
+
+    @JsonCreator
+    public static Status checkStatus (String newStatus) {
+        for(Status status : Status.values()) {
+            if (status.toString().equalsIgnoreCase(newStatus)) {
+                return status;
+            }
+        }
+        throw new IllegalStateException("Status must be one of the values: " + Arrays.toString(Status.values()));
+    }
 }
